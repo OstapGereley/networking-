@@ -65,7 +65,7 @@ namespace Networking.Functionality
                 {
                     name = "?";
                 }
-                ResultList.Add(new NetworkDeviceModel {Ip = ip, HostName = name});
+                ResultList.Add(new NetworkDeviceModel {Ip = ip, HostName = name, IsActive = true});
                 lock (LockObj)
                 {
                     _upCount++;

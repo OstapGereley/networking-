@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -29,10 +31,12 @@ namespace Networking.Functionality
             public int DwType;
         }
 
-        private string HostIp { get; set; }
+        private string HostIp { get; }
 
         public static string Ipstr;
         public static string Macname;
+
+        public static Dictionary<string, string> MacVendorsDictionary; 
 
         //handling buffer errors 
         private const int ErrorInsufficientBuffer = 122;
@@ -77,7 +81,40 @@ namespace Networking.Functionality
             finally
             {
             }
+
+
+            
         }
+
+        public static void LoadMacVendors()
+        {
+            MacVendorsDictionary = new Dictionary<string, string>();
+
+            using (var reader = new StreamReader(@"macDB.txt"))
+            {
+                while (!reader.EndOfStream)//21580
+                {
+                    var text = reader.ReadLine();
+                    var splitStrings = text.Split('\t');
+                    if (splitStrings.Length == 2)
+                    {
+                        MacVendorsDictionary.Add(splitStrings[1].Trim(), splitStrings[0].Trim());
+                    }
+
+                }
+            }
+        }
+
+        public static void FillVendors(ObservableCollection<NetworkDeviceModel> list)
+        {
+            foreach (var item in list)
+            {
+                string outvalue;
+                if(!String.IsNullOrEmpty(item.Mac))
+                item.Vendor = MacVendorsDictionary.TryGetValue(item.Mac.Substring(0, 8), out outvalue) ? outvalue : "N\\D";
+            }
+            
+        }  
 
         public List<NetworkDeviceModel> GetRecords()
         {
@@ -167,7 +204,7 @@ namespace Networking.Functionality
                     tbl =>
                         tbl.Mac != "00-00-00-00-00-00" && tbl.Mac != "FF-FF-FF-FF-FF-FF" &&
                         tbl.Ip.Contains(HostIp)).ToList();
-        }
+        }  
 
         public void Dispose()
         {

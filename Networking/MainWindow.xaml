@@ -1,7 +1,27 @@
 ﻿<Window x:Class="Networking.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="351.292" Width="558.58">
     <Grid>
+        <StackPanel>
+            <TabControl>
+                <TabItem  Header="Network monitor">
+                    <StackPanel Margin="5" Orientation="Vertical">
+                        <DockPanel>
+                            <DataGrid Name="NetworkInfoGrid"  AutoGenerateColumns="True" Margin="5" Height="Auto"></DataGrid>
+                        </DockPanel>
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Button Name="ScanPingButton" Margin="5" Content="Show by Ping" Click="ScanPingButton_OnClick"></Button>
+                            <Button Name="ScanArpButton" Margin="5" Content="Show by Arp" Click="ScanArpButton_OnClick"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
+            </TabControl>
+            <DockPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StatusBar HorizontalAlignment="Left" Height="Auto" Margin="5" VerticalAlignment="Bottom" />
+            </DockPanel>
+
+        </StackPanel>
+
     </Grid>
 </Window>

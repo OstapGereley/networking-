@@ -2,8 +2,10 @@
 {
     class NetworkDeviceModel
     {
-        public string Ip;
-        public string Mac;
-        public string HostName;
+        public string Ip { get; set; }
+        public string Mac { get; set; }
+        public string HostName { get; set; }
+        public string Vendor { get; set; }
+        public bool IsActive { get; set; }
     }
 }
