@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
 using Networking.Functionality;
 using Networking.Model;
+using MahApps.Metro.Controls;
 
 namespace Networking
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow 
     {
         private ObservableCollection<NetworkDeviceModel> resultList;
         private ObservableCollection<NetworkDeviceModel> tempList;
@@ -144,6 +146,14 @@ namespace Networking
             ArpTable.FillVendors(resultList);
             NetworkInfoGrid.Items.Refresh();
             }
+
+        private void ShowConnectionsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var connections = new ActiveConnections();
+            var list = connections.ShowActiveTcpConnections();
+           // list = (List<TcpConnectionInformation>) list.Where(a => !a.LocalEndPoint.ToString().Contains("127.0.0.1"));
+            NetworkControlGrid.ItemsSource = list;
         }
+    }
         #endregion
     }

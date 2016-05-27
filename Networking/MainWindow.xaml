@@ -1,27 +1,39 @@
-﻿<Window x:Class="Networking.MainWindow"
+﻿<Controls:MetroWindow x:Class="Networking.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="351.292" Width="558.58">
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        Title="Network Analyzer" Height="351.292" Width="558.58" ResizeMode="NoResize">
     <Grid>
-        <StackPanel>
+            <DockPanel>
+                <Menu DockPanel.Dock="Top">
+                <MenuItem Header="File"></MenuItem>
+                <MenuItem Header="Help"></MenuItem>
+                </Menu>
+                <StatusBar DockPanel.Dock="Bottom">
+                    <StatusBarItem>
+                        <TextBlock>asd</TextBlock>
+                    </StatusBarItem>
+                </StatusBar>
             <TabControl>
                 <TabItem  Header="Network monitor">
-                    <StackPanel Margin="5" Orientation="Vertical">
-                        <DockPanel>
-                            <DataGrid Name="NetworkInfoGrid"  AutoGenerateColumns="True" Margin="5" Height="Auto"></DataGrid>
-                        </DockPanel>
+                    <StackPanel Margin="5" Orientation ="Vertical">
+                        <DataGrid Name="NetworkInfoGrid"  AutoGenerateColumns="True" Margin="5" VerticalAlignment="Stretch"  MaxHeight="180" ></DataGrid>
                         <StackPanel Margin="5" Orientation="Horizontal">
                             <Button Name="ScanPingButton" Margin="5" Content="Show by Ping" Click="ScanPingButton_OnClick"></Button>
                             <Button Name="ScanArpButton" Margin="5" Content="Show by Arp" Click="ScanArpButton_OnClick"></Button>
                         </StackPanel>
                     </StackPanel>
                 </TabItem>
+                
+                <TabItem Header="Network Control">
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <DataGrid Name="NetworkControlGrid" AutoGenerateColumns="True" Margin="5" VerticalScrollBarVisibility="Visible" MaxHeight="170"></DataGrid>
+                        <StackPanel Orientation="Horizontal">
+                            <Button Name="ShowConnectionsButton" Margin="5" Content="Show connections" Click="ShowConnectionsButton_OnClick"></Button>
+                        </StackPanel>
+                    </StackPanel>
+                </TabItem>
             </TabControl>
-            <DockPanel  HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <StatusBar HorizontalAlignment="Left" Height="Auto" Margin="5" VerticalAlignment="Bottom" />
-            </DockPanel>
-
-        </StackPanel>
-
+        </DockPanel>
     </Grid>
-</Window>
+</Controls:MetroWindow>
