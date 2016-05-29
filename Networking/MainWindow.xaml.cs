@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Threading;
 using Networking.Functionality;
@@ -21,36 +22,19 @@ namespace Networking
     {
         private ObservableCollection<NetworkDeviceModel> resultList;
         private ObservableCollection<NetworkDeviceModel> tempList;
+        private ObservableCollection<NetworkConnectionsModel> connectionsModels; 
         
         private static object _lock = new object();
 
         public MainWindow()
         {
-
             InitializeComponent();
             ArpTable.LoadMacVendors();
-
-            
-
-            //TODO: threads sync\background worker
-
-            //var arpWork = new ArpTable();
-            //var arpResultList = arpWork.GetRecords();
-            //arpWork.Dispose();
         }
 
         #region PingStuff
         private void ScanPingButton_OnClick(object sender, RoutedEventArgs e)
         {
-            
-
-            //if (resultList != null)
-            //{
-            //    foreach (var item in resultList)
-            //    {
-            //        item.IsActive = false;
-            //    }
-            //}
             var bgw1 = new BackgroundWorker();
             bgw1.DoWork += bgw1_DoWork;
             bgw1.RunWorkerCompleted += bgw1_RunCompleted;
@@ -128,7 +112,6 @@ namespace Networking
             {
                 foreach (var dev in tempList)
                 {
-                    //if (resultList.Exists(a => a.Ip == dev.Ip))
                     if(resultList.Where(a => a.Ip == dev.Ip).ToList().Count > 0)
                     {
                         foreach (var res in resultList.Where(a => a.Ip == dev.Ip))
@@ -146,14 +129,47 @@ namespace Networking
             ArpTable.FillVendors(resultList);
             NetworkInfoGrid.Items.Refresh();
             }
+        #endregion
 
+        #region ConnectionsStuff
         private void ShowConnectionsButton_OnClick(object sender, RoutedEventArgs e)
         {
+            NetworkControlGrid.Items.Clear();
             var connections = new ActiveConnections();
-            var list = connections.ShowActiveTcpConnections();
-           // list = (List<TcpConnectionInformation>) list.Where(a => !a.LocalEndPoint.ToString().Contains("127.0.0.1"));
-            NetworkControlGrid.ItemsSource = list;
+            connectionsModels = new ObservableCollection<NetworkConnectionsModel>(connections.ShowActiveTcpConnections());
+            NetworkControlGrid.ItemsSource = connectionsModels;
         }
-    }
+
+
+        
+
+        private void BlockSelectedConnection_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (NetworkControlGrid.SelectedItem == null) return;
+            var item = (NetworkConnectionsModel) NetworkControlGrid.SelectedItem;
+            FWCtrl.AddInRule(item.DestinationIp, item.DestinationPort);
+            FWCtrl.AddOutRule(item.DestinationIp, item.DestinationPort);
+            foreach (var el in connectionsModels.Where(el => el.DestinationIp == item.DestinationIp))
+            {
+                el.FirewallRule = true;
+            }
+            NetworkControlGrid.Items.Refresh();
+        }
+
+        
+
+        private void DeleteRuleButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (NetworkControlGrid.SelectedItem == null) return;
+            var item = (NetworkConnectionsModel)NetworkControlGrid.SelectedItem;
+            FWCtrl.DeleteRule(item.DestinationIp, item.DestinationPort);
+            foreach (var el in connectionsModels.Where(el => el.DestinationIp == item.DestinationIp))
+            {
+                el.FirewallRule = false;
+            }
+            NetworkControlGrid.Items.Refresh();
+        }
         #endregion
     }
+
+}
