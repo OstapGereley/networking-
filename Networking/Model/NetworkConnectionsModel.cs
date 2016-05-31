@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Networking.Model
 {
-    class NetworkConnectionsModel
+    public class NetworkConnectionsModel
     {
         public string SourceIp { get; set; }
         public string SourcePort { get; set; }

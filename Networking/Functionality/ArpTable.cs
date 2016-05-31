@@ -11,7 +11,7 @@ using Networking.Model;
 
 namespace Networking.Functionality
 {
-    internal class ArpTable : IDisposable
+    public class ArpTable : IDisposable
     {
         private const int MaxlenPhysaddr = 8;
         //storing mac
@@ -86,23 +86,28 @@ namespace Networking.Functionality
             
         }
 
-        public static void LoadMacVendors()
+        public static int LoadMacVendors()
         {
             MacVendorsDictionary = new Dictionary<string, string>();
-
-            using (var reader = new StreamReader(@"macDB.txt"))
+            if (File.Exists(@"macDB.txt"))
             {
-                while (!reader.EndOfStream)//21580
+                using (var reader = new StreamReader(@"macDB.txt"))
                 {
-                    var text = reader.ReadLine();
-                    var splitStrings = text.Split('\t');
-                    if (splitStrings.Length == 2)
+                    while (!reader.EndOfStream) //21580
                     {
-                        MacVendorsDictionary.Add(splitStrings[1].Trim(), splitStrings[0].Trim());
-                    }
+                        var text = reader.ReadLine();
+                        var splitStrings = text.Split('\t');
+                        if (splitStrings.Length == 2)
+                        {
+                            MacVendorsDictionary.Add(splitStrings[1].Trim(), splitStrings[0].Trim());
+                        }
 
+                    }
                 }
+                return 0;
             }
+            return 1;
+            
         }
 
         public static void FillVendors(ObservableCollection<NetworkDeviceModel> list)

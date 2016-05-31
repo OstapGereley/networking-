@@ -8,7 +8,7 @@ using Networking.Model;
 
 namespace Networking.Functionality
 {
-    class ActiveConnections
+    public class ActiveConnections
     {
         public  List<NetworkConnectionsModel> ShowActiveTcpConnections()
         {

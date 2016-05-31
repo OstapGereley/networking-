@@ -3,7 +3,7 @@ using NetFwTypeLib;
 
 namespace Networking.Functionality
 {
-    internal static class FWCtrl
+    public static class FirewallControl
     {
         private const string guidFWPolicy2 = "{E2B3C97F-6AE1-41AC-817A-F6F92166D7DD}";
         private const string guidRWRule = "{2C5BC43E-3369-4C33-AB0C-BE9469677AF4}";

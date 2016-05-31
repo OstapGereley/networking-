@@ -10,9 +10,8 @@ using Networking.Model;
 
 namespace Networking.Functionality
 {
-    internal class PingScan
+    public class PingScan
     {
-        private static CountdownEvent _countdown;
         private static int _upCount;
         private static readonly object LockObj = new object();
         public static List<NetworkDeviceModel> ResultList = new List<NetworkDeviceModel>();
@@ -31,22 +30,13 @@ namespace Networking.Functionality
 
         public List<NetworkDeviceModel> StartPing()
         {
-            _countdown = new CountdownEvent(1);
-            var sw = new Stopwatch();
-            sw.Start();
             for (var i = 1; i < 255; i++)
             {
                 var ip = _baseIp + i;
                 var p = new Ping();
                 p.PingCompleted += p_PingCompleted;
-                _countdown.AddCount();
                 p.SendAsync(ip, 250, ip);
             }
-            _countdown.Signal();
-            _countdown.Wait();
-            sw.Stop();
-            var span = new TimeSpan(sw.ElapsedTicks);
-            Debug.WriteLine("Took {0} milliseconds. {1} hosts active.", sw.ElapsedMilliseconds, _upCount);
             return ResultList;
         }
 
@@ -73,9 +63,8 @@ namespace Networking.Functionality
             }
             else if (e.Reply == null)
             {
-                Debug.WriteLine("Pinging {0} failed. (Null Reply object?)", ip);
-            }
-            _countdown.Signal();
+                Debug.WriteLine("Pinging {0} failed. (Null Reply object?)", ip);}
+            
         }
     }
 }

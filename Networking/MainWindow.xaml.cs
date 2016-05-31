@@ -26,15 +26,19 @@ namespace Networking
         
         private static object _lock = new object();
 
+        private bool flag = true;
+
         public MainWindow()
         {
             InitializeComponent();
-            ArpTable.LoadMacVendors();
         }
 
         #region PingStuff
         private void ScanPingButton_OnClick(object sender, RoutedEventArgs e)
         {
+            ScanPingButton.Visibility = Visibility.Hidden;
+            ScanArpButton.Visibility = Visibility.Hidden;
+            StatusBlock.Text = "Scanning by ping. Please wait..";
             var bgw1 = new BackgroundWorker();
             bgw1.DoWork += bgw1_DoWork;
             bgw1.RunWorkerCompleted += bgw1_RunCompleted;
@@ -77,6 +81,10 @@ namespace Networking
                 }
             }
             NetworkInfoGrid.Items.Refresh();
+
+            ScanPingButton.Visibility = Visibility.Visible;
+            ScanArpButton.Visibility = Visibility.Visible;
+            StatusBlock.Text = "Ready.";
 
 
         }
@@ -126,7 +134,17 @@ namespace Networking
                 }
             }
 
-            ArpTable.FillVendors(resultList);
+            if (ArpTable.LoadMacVendors() == 0)
+            {
+                StatusBlock.Text = "File loaded succesfuly";
+                ArpTable.FillVendors(resultList);
+                
+            }
+            else
+            {
+                StatusBlock.Text = "File with vendors not found";
+            }
+            
             NetworkInfoGrid.Items.Refresh();
             }
         #endregion
@@ -147,13 +165,14 @@ namespace Networking
         {
             if (NetworkControlGrid.SelectedItem == null) return;
             var item = (NetworkConnectionsModel) NetworkControlGrid.SelectedItem;
-            FWCtrl.AddInRule(item.DestinationIp, item.DestinationPort);
-            FWCtrl.AddOutRule(item.DestinationIp, item.DestinationPort);
+            FirewallControl.AddInRule(item.DestinationIp, item.DestinationPort);
+            FirewallControl.AddOutRule(item.DestinationIp, item.DestinationPort);
             foreach (var el in connectionsModels.Where(el => el.DestinationIp == item.DestinationIp))
             {
                 el.FirewallRule = true;
             }
             NetworkControlGrid.Items.Refresh();
+            StatusBlock.Text = "Rule created succesfully";
         }
 
         
@@ -162,14 +181,38 @@ namespace Networking
         {
             if (NetworkControlGrid.SelectedItem == null) return;
             var item = (NetworkConnectionsModel)NetworkControlGrid.SelectedItem;
-            FWCtrl.DeleteRule(item.DestinationIp, item.DestinationPort);
+            FirewallControl.DeleteRule(item.DestinationIp, item.DestinationPort);
             foreach (var el in connectionsModels.Where(el => el.DestinationIp == item.DestinationIp))
             {
                 el.FirewallRule = false;
             }
             NetworkControlGrid.Items.Refresh();
+            StatusBlock.Text = "Rule deleted succesfully";
         }
         #endregion
+
+        private void ExitItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void AboutItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (flag)
+            {
+                FunctionsControl.Visibility = Visibility.Collapsed;
+                AboutBlock.Visibility = Visibility.Visible;
+                AboutBlock.Text = "Utility written by Ostap Gereley \n as a thesis project. \n Lviv 2016";
+                flag = false;
+            }
+            else
+            {
+                FunctionsControl.Visibility = Visibility.Visible;
+                AboutBlock.Visibility = Visibility.Collapsed;
+                flag = true;
+            }
+
+        }
     }
 
 }

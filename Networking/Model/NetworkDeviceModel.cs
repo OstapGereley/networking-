@@ -1,6 +1,6 @@
 ﻿namespace Networking.Model
 {
-    class NetworkDeviceModel
+    public class NetworkDeviceModel
     {
         public string Ip { get; set; }
         public string Mac { get; set; }
