@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.NetworkInformation;
-using System.Text;
-using System.Threading.Tasks;
 using Networking.Model;
 
 namespace Networking.Functionality
 {
-    public class ActiveConnections
+    public static  class ActiveConnections
     {
-        public  List<NetworkConnectionsModel> ShowActiveTcpConnections()
+        public static List<NetworkConnectionsModel> ShowActiveTcpConnections()
         {
             var properties = IPGlobalProperties.GetIPGlobalProperties();
             var connList = properties.GetActiveTcpConnections().ToList();

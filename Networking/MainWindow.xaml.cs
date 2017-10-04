@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Net.NetworkInformation;
-using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Threading;
 using Networking.Functionality;
 using Networking.Model;
-using MahApps.Metro.Controls;
 
 namespace Networking
 {
@@ -153,8 +146,7 @@ namespace Networking
         private void ShowConnectionsButton_OnClick(object sender, RoutedEventArgs e)
         {
             NetworkControlGrid.Items.Clear();
-            var connections = new ActiveConnections();
-            connectionsModels = new ObservableCollection<NetworkConnectionsModel>(connections.ShowActiveTcpConnections());
+            connectionsModels = new ObservableCollection<NetworkConnectionsModel>(ActiveConnections.ShowActiveTcpConnections());
             NetworkControlGrid.ItemsSource = connectionsModels;
         }
 

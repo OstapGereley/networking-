@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Networking.Functionality;
 
@@ -14,8 +10,7 @@ namespace NetworkingTests
         [TestMethod]
         public void GettingConnectionsTest()
         {
-            var connections = new ActiveConnections();
-            var list = connections.ShowActiveTcpConnections();
+            var list = ActiveConnections.ShowActiveTcpConnections();
             Assert.IsNotNull(list);
         }
 
@@ -26,10 +21,9 @@ namespace NetworkingTests
             {
                 FirewallControl.AddInRule("212.42.76.253", "80");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
-                throw;
             }
         }
 
@@ -40,10 +34,9 @@ namespace NetworkingTests
             {
                 FirewallControl.AddOutRule("212.42.76.253", "80");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
-                throw;
             }
         }
 
@@ -54,10 +47,9 @@ namespace NetworkingTests
             {
                 FirewallControl.DeleteRule("212.42.76.253", "80");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Assert.Fail();
-                throw;
             }
         }
     }

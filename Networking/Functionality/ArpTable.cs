@@ -41,7 +41,6 @@ namespace Networking.Functionality
         //handling buffer errors 
         private const int ErrorInsufficientBuffer = 122;
         private static IntPtr _buffer;
-        private static int _result;
 
         //geting IpNetTable function
         [DllImport("IpHlpApi.dll")]
@@ -63,19 +62,19 @@ namespace Networking.Functionality
 
 
             var bytesNeeded = 0;
-            _result = GetIpNetTable(IntPtr.Zero, ref bytesNeeded, false);
-            if (_result != ErrorInsufficientBuffer)
+            var result = GetIpNetTable(IntPtr.Zero, ref bytesNeeded, false);
+            if (result != ErrorInsufficientBuffer)
             {
-                throw new Win32Exception(_result);
+                throw new Win32Exception(result);
             }
             _buffer = IntPtr.Zero;
             try
             {
                 _buffer = Marshal.AllocCoTaskMem(bytesNeeded);
-                _result = GetIpNetTable(_buffer, ref bytesNeeded, false);
-                if (_result != 0)
+                result = GetIpNetTable(_buffer, ref bytesNeeded, false);
+                if (result != 0)
                 {
-                    throw new Win32Exception(_result);
+                    throw new Win32Exception(result);
                 }
             }
             finally

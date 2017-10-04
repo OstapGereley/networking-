@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Threading;
 using Networking.Model;
 
 namespace Networking.Functionality
@@ -51,7 +49,7 @@ namespace Networking.Functionality
                     var hostEntry = Dns.GetHostEntry(ip);
                     name = hostEntry.HostName;
                 }
-                catch (SocketException ex)
+                catch (SocketException)
                 {
                     name = "?";
                 }
