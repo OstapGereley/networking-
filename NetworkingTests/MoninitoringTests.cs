@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Networking.Functionality;
+﻿using Networking.Functionality;
+using NUnit.Framework;
 
 namespace NetworkingTests
 {
-    [TestClass]
+    [TestFixture]
     public class MoninitoringTests
     {
-        [TestMethod]
+        [Test]
         public void PingProductivityTest()
         {
             var ping = new PingScan();
@@ -14,14 +14,14 @@ namespace NetworkingTests
             Assert.IsNotNull(list.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void ArpLoadingProductivityTest()
         {
           var res = ArpTable.LoadMacVendors();
             Assert.AreEqual(res,0);
         }
 
-        [TestMethod]
+        [Test]
         public void ArpRecordsProductivity()
         {
             var arp = new ArpTable();
