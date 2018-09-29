@@ -1,20 +1,20 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Networking.Functionality;
+using NUnit.Framework;
 
 namespace NetworkingTests
 {
-    [TestClass]
+    [TestFixture]
     public class ControlTests
     {
-        [TestMethod]
+        [Test]
         public void GettingConnectionsTest()
         {
             var list = ActiveConnections.ShowActiveTcpConnections();
             Assert.IsNotNull(list);
         }
 
-        [TestMethod]
+        [Test]
         public void AddingOutBlockTest()
         {
             try
@@ -27,7 +27,7 @@ namespace NetworkingTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void AddingInBlockTest()
         {
             try
@@ -40,7 +40,7 @@ namespace NetworkingTests
             }
         }
 
-        [TestMethod]
+        [Test]
         public void DeletingBlockTest()
         {
             try
